@@ -167,3 +167,4 @@ ComboBox控件如何设置为不可输入只选？,设置DropDownStyle属性为D
 如何处理窗体关闭前的确认操作？,在窗体的FormClosing事件中，判断用户选择，如果取消关闭，设置e.Cancel = true。
 OpenFileDialog的作用是什么？,文件打开对话框，用于让用户选择文件（如选择图片路径），获取FileName属性。
 如何实现ComboBox的动态数据绑定？,设置DataSource为对象集合，DisplayMember为显示属性名，ValueMember为实际值属性名。
+上位机, 上位机
