@@ -96,3 +96,4 @@ C#中的checked和unchecked关键字作用？,控制整数运算溢出时是否�
 什么是同步上下文(SynchronizationContext)？,用于在特定线程（如UI线程）中封送代码执行，async/await中用于在await后切回原线程。
 什么是影子拷贝(Shadow Copying)？,在ASP.NET等环境中，将程序集复制到临时目录运行，以便在不停止服务的情况下更新原DLL文件。
 如何理解“组合优于继承”？,继承耦合度高，父类变动影响子类；组合更灵活，通过组装对象实现功能，更易维护和扩展。
+MidLevelSoftwareEngineer_QA_100,MidLevelSoftwareEngineer_QA_100
