@@ -1,0 +1,169 @@
+值类型与引用类型的区别,值类型存储在栈上直接包含数据；引用类型存储在堆上存储数据的地址。
+Struct（结构体）与Class（类）的主要区别,Struct是值类型不支持继承；Class是引用类型支持继承和多态。
+ref与out关键字的区别,ref参数在使用前必须初始化；out参数在方法返回前必须赋值。
+String与StringBuilder的区别,String是不可变的，修改会产生新对象；StringBuilder是可变的，适合频繁字符串拼接。
+什么是装箱（Boxing）和拆箱（Unboxing）,装箱是将值类型转换为引用类型（Object）；拆箱是反之，会有性能损耗。
+const与readonly的区别,const是编译时常量；readonly是运行时常量，只能在声明或构造函数中赋值。
+C#中委托（Delegate）的作用,一种引用类型，表示对具有特定参数列表和返回类型的方法的引用，用于回调和事件。
+事件（Event）与委托的区别,事件是委托的封装，只允许在类内部触发，外部只能订阅（+=）或取消订阅（-=）。
+接口（Interface）与抽象类（Abstract Class）的区别,接口只能定义行为规范，不能有实现（C# 8.0前）；抽象类可以包含部分实现和字段。
+什么是泛型（Generic）及其优势,允许定义代码时不指定具体数据类型，提高代码复用性、类型安全和性能（避免装箱拆箱）。
+IEnumerable与IQueryable的区别,IEnumerable在内存中查询（LINQ to Objects）；IQueryable在数据库端查询（LINQ to SQL），支持延迟执行。
+using关键字的两个主要用途,1. 引入命名空间；2. 定义作用域，自动调用IDisposable对象的Dispose方法释放资源。
+GC（垃圾回收）的基本原理,CLR自动管理内存，通过标记-压缩算法回收不再被引用的对象内存。
+Finalize与Dispose的区别,Finalize由GC在不确定时间调用（析构函数）；Dispose由开发者主动调用以释放非托管资源。
+什么是反射（Reflection）,程序运行时动态获取类型信息（如类、方法、属性）并动态调用的能力。
+Task与Thread的区别,Thread是底层线程；Task是基于线程池的高级抽象，更适合处理异步操作和资源管理。
+async/await的作用,简化异步编程，使异步代码像同步代码一样编写，不会阻塞主线程（UI线程）。
+如何解决跨线程访问UI控件异常,使用控件的Invoke（同步）或BeginInvoke（异步）方法将操作封送回UI线程。
+lock关键字的作用及底层实现,确保同一时间只有一个线程执行代码块，底层基于Monitor实现。
+Monitor.Enter与Monitor.TryEnter的区别,Enter会无限等待锁；TryEnter可以设置超时时间，防止死锁。
+volatile关键字的作用,禁止编译器优化，确保字段的读写直接操作内存，保证多线程下的可见性。
+Interlocked类的作用,提供原子操作（如Increment, CompareExchange），用于多线程下安全修改变量。
+什么是死锁（Deadlock）,两个或更多线程互相等待对方释放资源，导致永久阻塞。
+Thread.Sleep(0)的含义,挂起当前线程，放弃CPU时间片，允许同优先级其他线程执行。
+C#中的属性（Property）与字段（Field）,属性提供对字段的封装（get/set），可添加逻辑控制；字段是实际存储数据的变量。
+静态构造函数（Static Constructor）的执行时机,在类被加载（首次访问静态成员或创建实例）时自动执行，且只执行一次。
+扩展方法（Extension Method）的定义要求,必须定义在静态类中，且是静态方法，第一个参数用this修饰。
+LINQ中Deferred Execution（延迟执行）是什么,查询表达式在定义时不会执行，只有在遍历结果（如foreach, ToList）时才执行。
+Func与Action委托的区别,Func有返回值；Action没有返回值（void）。
+什么是闭包（Closure）,匿名函数捕获了外部作用域的变量，延长了该变量的生命周期。
+List<T>与ArrayList的区别,List<T>是泛型，类型安全且性能好；ArrayList存储Object，涉及装箱拆箱且类型不安全。
+Dictionary<TKey, TValue>的内部实现,基于哈希表（Hash Table），通过Key的GetHashCode快速查找。
+GetHashCode重写的原则,如果两个对象Equals为true，则HashCode必须相同；反之不一定。
+is与as操作符的区别,is检查类型返回bool；as尝试转换类型，成功返回对象，失败返回null（不抛异常）。
+params关键字的作用,允许方法接收可变数量的参数，必须是参数列表中最后一个。
+什么是序列化与反序列化,序列化将对象转换为流/字符串（XML/JSON/Binary）；反序列化是反向过程。
+XML序列化与Binary序列化的区别,XML通过公共属性序列化，跨平台可读；Binary序列化所有字段，性能高但版本兼容性差。
+JSON序列化中Newtonsoft.Json与System.Text.Json的区别,System.Text.Json是.NET Core内置，性能更高；Newtonsoft功能更丰富，兼容性更好。
+什么是特性（Attribute）,用于向程序集添加元数据，可以通过反射在运行时读取。
+DllImport的作用,用于调用非托管代码（如C/C++编写的DLL），常用于上位机硬件驱动调用。
+Marshal类的作用,在托管内存和非托管内存之间转换数据，处理复杂结构体传递。
+StructLayout(LayoutKind.Sequential)的作用,强制结构体在内存中的布局顺序，确保与C++结构体内存对齐一致。
+如何防止WinForms/WPF界面假死,耗时操作（如通讯、IO）放在后台线程（Task.Run）执行。
+SerialPort类的DataReceived事件特点,运行在辅助线程上，不能直接更新UI，需要Invoke。
+Socket中TCP与UDP的区别,TCP面向连接、可靠、有序；UDP无连接、不可靠、速度快。
+Socket的KeepAlive机制,检测死连接，防止连接因长时间无数据被防火墙断开。
+上位机中大小端（Endian）处理,网络传输通常是大端，PC通常是小端，使用BitConverter需注意转换。
+Modbus通信中CRC校验的作用,循环冗余校验，用于检测数据传输过程中是否发生错误。
+什么是单例模式（Singleton）及其线程安全实现,保证类只有一个实例，常用双重检查锁定（Double Check Locking）或Lazy<T>实现。
+观察者模式（Observer）在C#中的体现,事件（Event）机制就是典型的观察者模式。
+工厂模式（Factory）的应用场景,解耦对象的创建与使用，常用于支持多种硬件协议的切换。
+IDisposable接口的正确实现模式,同时支持Dispose()调用和Finalize()兜底，防止内存泄漏。
+WeakReference（弱引用）的作用,允许对象被GC回收，常用于缓存系统，防止内存溢出。
+AppDomain（应用程序域）的概念,逻辑上的进程隔离边界，一个进程可以包含多个AppDomain（.NET Core中被简化）。
+StackOverflowException通常原因,无限递归调用或分配过大的栈内存（如超大Struct）。
+OutOfMemoryException通常原因,堆内存耗尽，或大对象堆（LOH）碎片化导致无法分配连续内存。
+C#中??（空合并）操作符的作用,如果左操作数为null，则返回右操作数；否则返回左操作数。
+?.（空条件）操作符的作用,对象非null时访问成员，否则返回null，防止NullReferenceException。
+yield return的作用,实现迭代器，按需生成序列元素，不需要一次性将所有数据加载到内存。
+var关键字的本质,编译时类型推断，编译后是强类型，不是动态类型。
+dynamic关键字的特点,运行时解析类型，绕过编译时检查，用于与COM或动态语言交互。
+Checked与Unchecked关键字,控制算术运算是否检查溢出（如int最大值+1）。
+String.Intern（字符串驻留）池,CLR维护的字符串池，相同字面量字符串共享内存引用。
+Stopwatch与DateTime做计时的区别,Stopwatch基于硬件高精度计时，适合性能分析；DateTime受系统时钟调整影响。
+System.Timers.Timer与System.Windows.Forms.Timer区别,Forms.Timer在UI线程触发；Timers.Timer在线程池触发，精度更高。
+Task.WhenAll与Task.WaitAll的区别,WhenAll返回Task（非阻塞）；WaitAll阻塞当前线程直到完成。
+CancellationToken的作用,用于优雅地取消异步操作或长时间运行的任务。
+ConcurrentDictionary的优势,线程安全的字典，内部使用细粒度锁，适合多线程并发读写。
+BlockingCollection的作用,线程安全的集合，支持生产者-消费者模式，自动阻塞等待数据。
+AutoResetEvent与ManualResetEvent区别,AutoResetEvent唤醒一个线程后自动重置；ManualResetEvent需要手动重置。
+SemaphoreSlim的作用,限制同时访问资源的线程数量（信号量），支持异步等待。
+什么是死信队列（Dead Letter Queue）,消息队列中无法处理的消息的存放地，防止阻塞主流程。
+上位机开发中Log日志的重要性,记录系统运行状态、异常堆栈和通信报文，是排查现场问题的唯一依据。
+Debug与Release模式区别,Debug包含调试符号且不优化；Release进行编译器优化，性能更好但调试困难。
+PDB文件的作用,包含调试信息，将二进制代码映射回源代码行号。
+Obsolete特性的作用,标记方法或类已过时，编译时会产生警告或错误。
+Conditional特性的作用,根据预处理指令（如DEBUG）决定方法调用是否被编译。
+什么是依赖注入（DI）,通过构造函数等方式注入依赖对象，降低耦合度，方便测试和维护。
+IOC容器（控制反转）的作用,自动管理对象的创建和生命周期，实现依赖注入（如Autofac, ServiceCollection）。
+MVVM模式（WPF）的核心组件,Model（数据）、View（界面）、ViewModel（逻辑），通过Binding解耦。
+INotifyPropertyChanged接口的作用,WPF中通知View数据源已变更，实现双向绑定。
+ICommand接口的作用,WPF中将UI事件（如按钮点击）绑定到ViewModel中的方法。
+WPF中DependencyProperty（依赖属性）特点,支持样式、绑定、动画和默认值继承，比普通属性更高效。
+WPF与WinForms在渲染上的区别,WPF基于DirectX矢量渲染；WinForms基于GDI+位图渲染。
+Process类如何启动外部程序,Process.Start("exe路径")，可重定向标准输入输出以控制外部程序。
+FileSystemWatcher的作用,监控文件系统更改（新建、修改、删除），常用于监控配置文件热更新。
+MemoryMappedFile（内存映射文件）用途,用于超大文件处理或不同进程间的高速共享内存通信。
+BitConverter类的常用场景,将基础数据类型（int, float）与字节数组相互转换，用于通信协议解析。
+Math.Round的默认行为陷阱,默认是“四舍六入五成双”（Banker's rounding），非传统的四舍五入。
+float与double的精度问题,浮点数是近似存储，不应直接用==比较，应判断差值是否小于Epsilon。
+decimal类型的适用场景,高精度定点数，适合财务或高精度传感器数据，避免浮点误差。
+Tuple（元组）与ValueTuple的区别,Tuple是引用类型；ValueTuple是值类型（C# 7.0+），性能更好。
+如何获取当前程序的执行目录,AppDomain.CurrentDomain.BaseDirectory。
+Environment.NewLine的作用,获取当前系统的换行符（Win是\r\n，Linux是\n），保证跨平台兼容。
+Path.Combine的优势,自动处理路径分隔符，避免手动拼接字符串出错。
+Convert.ToInt32与int.Parse的区别,Convert处理null返回0；Parse处理null抛异常。
+TryParse系列的优势,尝试解析字符串，失败返回false而不抛异常，性能更高。
+String.IsNullOrEmpty与String.IsNullOrWhiteSpace,前者检查null或空串；后者还检查仅包含空格的字符串。
+什么是上下文切换（Context Switch）,CPU从一个线程切换到另一个线程保存和恢复状态的过程，有过高消耗。
+C#中 decimal 类型有什么特点？,decimal是128位精确的十进制值，通常用于财务和货币计算，精度比double高。
+变量的驼峰命名法（Camel Case）是指什么？,首字母小写，后续单词首字母大写（如 studentName），通常用于局部变量和私有字段。
+帕斯卡命名法（Pascal Case）是指什么？,所有单词首字母大写（如 GetStudentName），通常用于类名、方法名和属性名。
+什么是字面量（Literal）？,源代码中直接表示固定值的符号，如 100（整数）、"Hello"（字符串）、true（布尔值）。
+Visual Studio 中 F11 快捷键的作用？,逐语句调试，若当前语句是一个方法调用，调试器会进入该方法内部。
+Visual Studio 中 F10 快捷键的作用？,逐过程调试，若当前语句是一个方法调用，调试器会直接执行完该方法，不会进入内部。
+while 循环和 do-while 循环的核心区别？,while 先判断条件再执行（可能一次都不执行）；do-while 先执行一次再判断条件（至少执行一次）。
+什么是死循环？,循环条件永远为真，导致循环无法结束，通常需要使用 break 语句手动跳出。
+string.Join 方法的作用是什么？,将数组或集合中的元素用指定的分隔符连接成一个字符串。
+string.Split 方法的作用是什么？,将一个字符串按照指定的分隔符拆分成一个字符串数组。
+什么是隐式类型转换？,编译器自动完成的转换，通常是从低精度类型向高精度类型转换（如 int 转 double），不会丢失数据。
+什么是显式类型转换（强制转换）？,需要程序员手动指定的转换（如 (int)3.14），可能会导致精度丢失或溢出。
+类（Class）和结构（Struct）的主要区别？,类是引用类型（存放在堆上），结构是值类型（存放在栈上）。
+什么是访问修饰符 internal？,表示该成员或类只能在当前的程序集（项目）内部访问，这是类的默认修饰符。
+什么是字段（Field）的默认访问修饰符？,private（私有），只能在类内部访问。
+构造方法（Constructor）可以重载吗？,可以。一个类可以有多个构造方法，只要它们的参数列表不同（参数个数或类型不同）。
+什么是对象初始化器？,一种简化的语法，允许在创建对象时直接给属性赋值，无需显式调用构造方法设置属性。
+静态类（Static Class）有什么限制？,静态类不能被实例化（不能 new），且类中所有成员必须都是静态的。
+什么是垃圾回收（GC）？,.NET 自动管理内存的机制，负责释放不再被使用的对象所占用的内存。
+List<T> 集合的 Count 属性表示什么？,表示集合中当前实际包含的元素个数。
+Dictionary<TKey, TValue> 如何遍历？,可以遍历 Keys、Values，或者通过 KeyValuePair 遍历键值对。
+WinForm 中 Form.Show() 和 Form.ShowDialog() 的区别？,Show() 是非模态显示（可以切换到其他窗体）；ShowDialog() 是模态显示（必须关闭当前窗体才能操作其他窗体）。
+WinForm 中 FormClosing 事件的作用？,在窗体关闭之前触发，可以通过设置 Cancel 属性为 true 来阻止窗体关闭（常用于退出确认）。
+Label 控件的主要用途是什么？,用于在界面上显示文本信息，通常不由用户编辑。
+TextBox 控件的 PasswordChar 属性有什么用？,用于设置密码框的掩码字符（如 *），输入的内容会被该字符代替显示。
+CheckBox 和 RadioButton 的区别？,CheckBox 是复选框（支持多选）；RadioButton 是单选按钮（同一组内互斥，只能选一个）。
+ComboBox 的 DropDownStyle 属性设置为 DropDownList 会怎样？,下拉框将变成只读模式，用户只能从列表中选择，不能手动输入文本。
+Timer 控件的 Interval 属性单位是什么？,毫秒（ms）。
+如何给 WinForm 窗体添加菜单栏？,使用 MenuStrip 控件。
+什么是事件参数 sender？,在事件处理方法中，sender 代表触发该事件的控件对象（如点击按钮时的 Button 对象）。
+如何获取当前系统时间？,使用 DateTime.Now。
+File.Exists 方法的作用？,判断指定路径的文件是否存在，返回布尔值。
+Path.Combine 方法的作用？,将多个字符串路径组合成一个完整的路径，自动处理路径分隔符。
+try-catch-finally 结构中 finally 块的作用？,无论是否发生异常，finally 块中的代码都会执行，通常用于释放资源。
+上位机开发推荐的计算机硬件环境是什么？,建议i5 CPU（4核4线程以上）+ 8G内存 + 200G固态硬盘，系统建议Win10。
+Visual Studio中Debug和Release模式有什么区别？,Debug是调试模式，包含调试信息，不优化代码；Release是发布模式，文件较小，进行了代码优化，适合生产环境。
+.NET平台的编译过程是怎样的？,源代码经过第一次编译生成中间语言（IL）和元数据（DLL/EXE），运行时通过CLR中的JIT（即时编译器）进行第二次编译，生成机器码。
+什么是CLR（公共语言运行时）？,CLR是.NET程序的托管中心，负责内存管理、异常处理、垃圾回收、线程管理等，确保代码安全运行。
+什么是命名空间（Namespace）？,命名空间用于对类进行逻辑分组和管理，避免类名冲突，类似于行政区域划分。
+C#中变量命名有什么规范？,类、属性、方法使用Pascal命名法（首字母大写）；局部变量和私有字段使用Camel命名法（首字母小写）；不能以数字开头，不能使用关键字。
+C#中的值类型包括哪些？,整型（int, long等）、浮点型（float, double）、字符型（char）、布尔型（bool）、枚举（enum）、结构（struct）等。
+C#中的引用类型包括哪些？,类（class）、接口（interface）、数组（array）、委托（delegate）、字符串（string）等。
+值类型和引用类型在内存中有什么区别？,值类型存储在栈中，存储的是具体数据；引用类型存储在堆中，栈中存储的是数据的引用地址。
+string.Format和插值字符串$""有什么作用？,用于字符串格式化和拼接，插值字符串$""是C# 6.0后的语法糖，书写更简洁。
+Parse和Convert在类型转换中有什么区别？,Parse主要用于将字符串转换为值类型；Convert是万能转换器，处理null时不会报错（返回默认值），适用范围更广。
+逻辑运算符 && 和 || 的短路特性是什么？,&&（与）：只要有一个为假，后面不再执行；||（或）：只要有一个为真，后面不再执行。
+Switch结构和多重If结构如何选择？,Switch适合等值判断，代码清晰高效；If-Else适合区间判断或复杂逻辑。
+StringBuilder类有什么优势？,StringBuilder是可变字符串，在进行大量字符串拼接时，不会像String那样频繁创建新对象，内存效率更高。
+数组（Array）的特点是什么？,存储相同数据类型的一组数据，在内存中是连续的，长度一旦固定不可修改。
+foreach循环和for循环的区别？,for循环适合已知次数的遍历；foreach适合遍历集合或数组中的元素，不需要关注索引。
+const常量有什么特点？,在定义时必须初始化，且之后不能被修改。
+枚举（Enum）的作用是什么？,用于表示一组有限的命名整数常量，使代码更具可读性（如表示星期、状态等）。
+程序调试（Debug）的常用快捷键有哪些？,F5启动调试，F9设置断点，F10逐过程（不进入方法内部），F11逐语句（进入方法内部）。
+类（Class）和对象（Object）的关系？,类是抽象的模板（定义了属性和方法），对象是根据类创建的具体实例（拥有具体数据）。
+字段（Field）和属性（Property）的区别？,字段通常为private，用于类内部数据存储；属性通常为public，用于对外提供数据访问，可包含业务逻辑控制。
+构造方法（Constructor）的作用是什么？,用于对象的初始化，在创建对象（new）时自动调用。
+构造方法有什么特征？,方法名与类名相同，没有返回值（连void都不写），可以重载。
+this关键字代表什么？,代表当前对象的实例，用于区分成员变量和局部变量，或在一个构造方法中调用另一个构造方法。
+什么是静态成员（static）？,使用static修饰的成员属于类本身，不属于具体对象，通过“类名.成员名”直接调用，随程序启动初始化。
+泛型集合List<T>相对于数组的优势？,长度不固定，可以动态添加（Add）、删除（Remove）元素，且类型安全。
+字典集合Dictionary<K, V>的特点？,基于键值对（Key-Value）存储，通过Key可以快速查找Value，键必须唯一。
+面向对象的三大特性是什么？,封装、继承、多态。
+WinForm中的部分类（partial class）是什么意思？,允许将一个类的代码分散在多个文件中。在WinForm中，由设计器生成的代码和用户编写的代码分开存放，但编译时合并为一个类。
+Windows程序的事件驱动机制包含哪几个要素？,定义事件、处理事件（方法）、事件关联（委托）、激发事件。
+什么是模态窗体（ShowDialog）？,打开后必须关闭当前窗体才能操作其他窗体，常用于需要返回结果或强制用户操作的场景。
+如何让DataGridView不自动生成列？,设置AutoGenerateColumns属性为false。
+ComboBox控件如何设置为不可输入只选？,设置DropDownStyle属性为DropDownList。
+如何处理窗体关闭前的确认操作？,在窗体的FormClosing事件中，判断用户选择，如果取消关闭，设置e.Cancel = true。
+OpenFileDialog的作用是什么？,文件打开对话框，用于让用户选择文件（如选择图片路径），获取FileName属性。
+如何实现ComboBox的动态数据绑定？,设置DataSource为对象集合，DisplayMember为显示属性名，ValueMember为实际值属性名。

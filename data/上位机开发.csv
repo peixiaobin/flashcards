@@ -1,0 +1,100 @@
+什么是上位机开发？,指在PC端（通常是Windows）开发用于监控、控制下位机（PLC、单片机、仪表）的软件系统。
+C# 中值类型和引用类型的区别是什么？,值类型存储在栈中（存具体值），引用类型存储在堆中（存地址引用）。
+什么是装箱和拆箱？,装箱是将值类型转换为引用类型（Object），拆箱是将引用类型转换为值类型，会影响性能。
+struct 和 class 的主要区别是什么？,struct 是值类型，不支持继承（但可实现接口）；class 是引用类型，支持继承和多态。
+简述 C# 中的访问修饰符 public, private, protected, internal。,public: 公开；private: 类内部私有；protected: 类及子类可见；internal: 同一程序集可见。
+static 关键字的作用是什么？,用于声明静态成员或类，静态成员属于类本身而不是实例，在内存中只存在一份。
+什么是接口（Interface）？,接口定义了行为的契约，只包含方法/属性声明，不包含实现，类实现接口必须实现其所有成员。
+抽象类（Abstract Class）和接口的区别？,抽象类可以有部分实现和成员变量，用于"Is-a"关系；接口全是声明，用于"Can-do"行为能力。
+什么是委托（Delegate）？,委托是类型安全的函数指针，用于将方法作为参数传递。
+event 关键字的作用是什么？,event 是基于委托的封装，限制了外部只能通过 += 或 -= 操作，防止外部直接调用或赋值。
+简述 GC（垃圾回收）机制。,CLR 自动管理内存，定期检查堆上的对象，释放不再被引用的对象内存。
+using 语句块的作用是什么？,用于定义 IDisposable 对象的范围，确保在代码块结束时自动调用 Dispose() 释放非托管资源。
+string 和 StringBuilder 的区别？,string 是不可变的，每次修改都会产生新对象；StringBuilder 是可变的，适合大量字符串拼接。
+ref 和 out 参数的区别？,ref 传递前必须初始化，out 传递前无需初始化但在方法结束前必须赋值。
+什么是反射（Reflection）？,在运行时动态获取类型信息（如类、方法、属性）并动态调用或创建实例的技术。
+什么是泛型（Generics）？,允许定义类或方法时不指定具体数据类型，直到使用时才指定，提高了代码复用性和性能。
+List<T> 和 ArrayList 的区别？,List<T> 是泛型，类型安全且无装箱拆箱；ArrayList 存 Object，类型不安全且性能较差。
+上位机开发中常用的 UI 框架有哪些？,WinForms（经典、简单）、WPF（现代、灵活、基于DirectX）、UWP/MAUI（跨平台，工业用得少）。
+WinForms 中 Form 的生命周期事件顺序？,Constructor -> Load -> Shown -> Activated -> Closing -> Closed。
+什么是模态窗口（ShowDialog）和非模态窗口（Show）？,模态窗口会阻塞父窗口交互，直到关闭；非模态窗口不会阻塞。
+WinForms 中如何防止界面卡死？,不要在 UI 线程（主线程）执行耗时操作，应使用多线程或异步编程。
+什么是跨线程访问 UI 控件异常？,WinForms/WPF 禁止非创建线程直接操作 UI 控件，必须通过 Invoke/BeginInvoke 或 Dispatcher。
+WPF 的核心特点是什么？,基于 XAML 布局、强大的数据绑定（DataBinding）、样式与逻辑分离（MVVM）、矢量绘图。
+简述 MVVM 模式。,Model（数据模型）、View（界面）、ViewModel（业务逻辑），View 与 ViewModel 通过数据绑定交互。
+WPF 中 INotifyPropertyChanged 接口的作用？,用于通知 View 绑定的数据源属性发生了变化，从而自动更新界面。
+WPF 中 ICommand 接口的作用？,用于将 UI 事件（如按钮点击）与 ViewModel 中的逻辑解耦，替代传统的事件处理程序。
+什么是依赖属性（Dependency Property）？,WPF 特有的属性系统，支持样式、绑定、动画和默认值继承，节省内存。
+串口通信（SerialPort）中 BaudRate 代表什么？,波特率，表示每秒传输的符号数（位），发送端和接收端必须一致。
+串口通信中 Parity（校验位）有哪些类型？,None（无）、Odd（奇）、Even（偶）、Mark（1）、Space（0）。
+RS232 和 RS485 的主要区别？,RS232 是全双工、点对点、传输距离短；RS485 是半双工、支持多点轮询、抗干扰强、距离远。
+如何在 C# 中获取本机所有可用串口？,使用 System.IO.Ports.SerialPort.GetPortNames() 方法。
+什么是 Socket 编程？,基于 TCP/IP 协议的网络通信，分为 Server（监听）和 Client（连接）。
+TCP 和 UDP 的区别？,TCP 是面向连接、可靠传输（三次握手）；UDP 是无连接、不可靠但在实时性要求高时速度快。
+什么是 Modbus 协议？,工业自动化通用的通信协议，定义了主从问答式的报文结构。
+Modbus RTU 和 Modbus TCP 的区别？,RTU 运行在串口上，使用二进制紧凑编码，有 CRC 校验；TCP 运行在以太网上，去掉了 CRC，增加了 MBAP 头。
+Modbus 中的 4 个主要数据区是什么？,0x线圈（DO读写）、1x离散输入（DI只读）、3x输入寄存器（AI只读）、4x保持寄存器（AO/参数读写）。
+Modbus 报文中的功能码 03 代表什么？,读取保持寄存器（Read Holding Registers）。
+Modbus 报文中的功能码 06 和 10(十六进制) 代表什么？,06 写单个寄存器，10 (十进制16) 写多个寄存器。
+什么是字节序（Endianness）？,多字节数据在内存中的存储顺序，大端模式（Big-Endian）高位在前，小端模式（Little-Endian）低位在前，通信时需统一。
+CRC 校验的作用是什么？,循环冗余校验，用于检测数据传输过程中是否发生位错误。
+上位机如何解析 PLC 发来的浮点数（Float）？,通常将两个 16 位寄存器（4字节）合并，通过 BitConverter.ToSingle 转换，注意高低字顺序。
+什么是 OPC DA 和 OPC UA？,OPC 是工业互联标准。DA 基于 Windows COM/DCOM，较老且配置麻烦；UA 基于 TCP/Https，跨平台、安全、现代。
+Thread 和 Task 的区别？,Thread 是底层线程对象，开销大；Task 是基于线程池的高级抽象，支持返回值、取消、等待，更轻量。
+async 和 await 关键字的作用？,用于简化异步编程，使异步代码写起来像同步代码，且不会阻塞 UI 线程。
+Task.Run() 的作用？,将 CPU 密集型任务放到线程池中运行，避免阻塞主线程。
+什么是线程安全？,指多线程访问同一资源时，采用加锁等机制保证数据一致性，防止竞态条件。
+lock 关键字的作用？,用于互斥锁，确保同一时间只有一个线程能执行被锁定的代码块。
+Monitor.Enter 和 Monitor.Exit 与 lock 的关系？,lock 是 Monitor 的语法糖，底层就是通过 Monitor 实现的，且自动包含 try...finally 释放锁。
+什么是死锁（Deadlock）？,两个或多个线程互相等待对方释放资源，导致所有线程永久阻塞。
+System.Timers.Timer 和 System.Windows.Forms.Timer 的区别？,Forms.Timer 运行在 UI 线程，精度低；System.Timers.Timer 运行在线程池，精度较高，修改 UI 需 Invoke。
+什么是单例模式（Singleton）？,保证一个类仅有一个实例，并提供一个全局访问点。常用于全局配置管理或通信核心类。
+什么是工厂模式（Factory）？,定义创建对象的接口，让子类决定实例化哪一个类，实现创建与使用分离。
+什么是观察者模式（Observer）？,定义对象间的一对多依赖，当一个对象状态改变时，所有依赖者都会收到通知。C# 的 event 就是典型应用。
+ADO.NET 中的 SqlConnection 和 SqlCommand 是什么？,SqlConnection 用于建立数据库连接，SqlCommand 用于执行 SQL 语句或存储过程。
+SqlDataReader 和 SqlDataAdapter 的区别？,DataReader 是在线、只读、向前的流，速度快；DataAdapter 配合 DataSet 使用，是离线模式，内存占用大。
+什么是 ORM？列举 C# 常用的 ORM 框架。,对象关系映射，将数据库表映射为 C# 对象。常用：Entity Framework Core (EF Core), Dapper (轻量级), SqlSugar。
+SQLite 数据库在上位机中的优势？,无需安装服务，单文件数据库，轻量级，适合嵌入式工控机或小型项目。
+如何防止 SQL 注入攻击？,使用参数化查询（SqlParameter），不要直接拼接 SQL 字符串。
+什么是 XML 和 JSON？在上位机中有什么用？,都是数据交换格式。XML 严谨，常用于配置文件；JSON 轻量，常用于 WebAPI 交互或配置。
+Newtonsoft.Json (Json.NET) 是什么？,最流行的 .NET JSON 处理库，用于对象的序列化（Object转Json）和反序列化（Json转Object）。
+什么是序列化（Serialization）？,将对象状态转换为可存储或传输的格式（如二进制、XML、JSON）的过程。
+如何读取和写入 CSV 文件？,可以使用 StreamReader/StreamWriter 手动读写，或使用 CsvHelper 等开源库。
+什么是 NLog 或 Serilog？,常用的 .NET 日志框架，用于将运行日志输出到文件、控制台或数据库，方便排查故障。
+上位机开发中如何捕获全局未处理异常？,WinForms 订阅 Application.ThreadException 和 AppDomain.CurrentDomain.UnhandledException。
+什么是 MQTT 协议？,轻量级的发布/订阅消息传输协议，广泛用于工业物联网（IIoT）数据上云。
+MQTT 中的 QoS 0, 1, 2 分别代表什么？,0: 最多发一次（发完不管）；1: 至少发一次（确保收到但可能重复）；2: 只有一次（确保收到且不重复）。
+什么是 P/Invoke (Platform Invoke)？,用于在托管代码（C#）中调用非托管代码（如 C++ 写的 DLL），常用于驱动调用。
+[DllImport] 特性的作用？,标识要调用的非托管 DLL 的名称和入口点。
+什么是 IntPtr？,表示指针或句柄的平台特定整数类型，常用于与 Windows API 交互。
+上位机如何绘制实时曲线？,使用图表控件，如开源的 ScottPlot、OxyPlot、LiveCharts，或商业的 TeeChart。
+实时曲线数据量过大导致卡顿怎么解决？,采用抽稀算法（如降采样）、限制显示点数、使用高性能绘图库（如 ScottPlot）、双缓冲绘图。
+什么是 PID 算法？上位机需要做 PID 吗？,比例-积分-微分控制算法。通常由下位机（PLC）完成，但有时上位机也需做简单控制或仿真。
+什么是大小端转换？BitConverter.IsLittleEndian 表示什么？,判断当前系统是否为小端序。如果是 true，处理大端设备数据时需要 Array.Reverse 翻转字节。
+BCD 码是什么？,二进制编码的十进制数，常用于仪器仪表显示数据，如时间、计数。
+Hex String（16进制字符串）和 Byte Array（字节数组）如何互转？,字符串转字节：Convert.ToByte(substring, 16)；字节转字符串：BitConverter.ToString(bytes).Replace("-", "")。
+什么是 NuGet？,Visual Studio 的包管理器，用于下载和管理第三方库（如 NModbus, MQTTnet）。
+Debug 和 Release 模式的区别？,Debug 包含调试信息，不优化代码；Release 进行编译器优化，去除调试信息，性能更高，体积更小。
+什么是 .NET Core / .NET 5+ 与 .NET Framework 的区别？,Framework 仅限 Windows；Core/.NET 5+ 是跨平台、高性能、开源的现代版本。
+什么是依赖注入（Dependency Injection）？,通过容器将依赖对象注入到类中，而不是在类内部 new，降低耦合度，利于测试。
+单元测试（Unit Test）的作用？,使用 MSTest/NUnit/xUnit 对代码最小单元进行验证，保证逻辑正确，防止修改代码引入新 Bug。
+如何让 WinForms 程序开机自启动？,将程序路径写入注册表 HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run。
+什么是看门狗（Watchdog）？在上位机怎么实现？,用于监控程序是否死机。上位机可开启一个独立进程或线程监控主进程心跳，超时则重启主进程。
+什么是 ClickOnce 部署？,微软提供的一种简易发布技术，用户点击网页链接即可安装，并支持自动更新。
+什么是 Setup Project (Installer)？,制作 .msi 或 .exe 安装包，打包依赖环境（如 .NET Runtime），并在客户机创建快捷方式。
+如何混淆代码（Obfuscation）？,使用 Dotfuscator 或 ConfuserEx 等工具打乱类名、方法名，防止被轻易反编译查看源码。
+什么是 TCP 粘包和拆包？如何解决？,TCP 是流式协议，不保留消息边界。解决方法：固定长度、特定分隔符、消息头带长度字段。
+C# 中 volatile 关键字的作用？,告诉编译器该字段可能被多个线程同时修改，禁止编译器对该字段的读写进行优化（缓存），保证可见性。
+什么是 GDI+？,WinForms 的绘图基础，Graphics Device Interface，用于在窗体上绘制直线、圆、文字等。
+什么是双缓冲（Double Buffering）？,在内存中先画好图像，再一次性贴到屏幕上，解决绘图闪烁问题。
+如何限制 TextBox 只能输入数字？,在 KeyPress 事件中判断 e.KeyChar 是否为数字或退格键，否则 e.Handled = true。
+什么是用户控件（UserControl）？,封装了一组控件和逻辑的自定义控件，方便在不同窗体间复用界面模块。
+什么是状态模式（State Pattern）在上位机中的应用？,将设备的“待机、运行、故障、暂停”等状态封装成类，管理复杂的状态流转逻辑。
+什么是 CRC16-Modbus 多项式？,通常是 0xA001（低位优先）或 0x8005，计算时需要确认多项式和初始值（通常 0xFFFF）。
+OPC UA 中的 NodeId 是什么？,节点的唯一标识符，包含命名空间索引（ns）和标识符（可以是数字或字符串），用于读写数据。
+如何使用 C# 操作 Excel 文件？,使用 NPOI（无需安装 Office）、EPPlus（推荐）或 Microsoft.Office.Interop.Excel（需安装 Office，慢）。
+什么是虚拟串口（Virtual Serial Port）？,软件模拟的一对互通串口（如 COM1-COM2），用于在没有硬件的情况下调试上位机串口程序。
+什么是 Wireshark？,网络抓包工具，用于分析 TCP/UDP/ModbusTCP 通信报文，排查网络问题。
+什么是 Modbus Poll 和 Modbus Slave？,常用的 Modbus 调试工具。Poll 模拟主机（上位机），Slave 模拟从机（设备）。
+上位机项目中 Config 文件的作用？,App.config 或 appsettings.json，用于存储连接字符串、串口号、IP地址等可配置参数，避免硬编码。
+如何优化大量 DataGridView 数据的加载速度？,开启 VirtualMode（虚拟模式），或使用双缓冲，或分页加载，避免一次性添加过多行。

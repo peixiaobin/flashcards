@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+<title>上位机面试闪卡</title>
+
+<style>
+    :root {
+        --primary-color: #4CAF50;
+        --accent-color: #2196F3;
+        --text-color: #333;
+        --bg-color: #f0f2f5;
+        --card-height: 360px; /* 稍微调高以容纳更多文字 */
+        --card-width: 90%;
+        --max-width: 400px;
+    }
+
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        background: var(--bg-color);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px 10px;
+        margin: 0;
+        min-height: 100vh;
+        overflow-x: hidden;
+        -webkit-tap-highlight-color: transparent;
+        color: var(--text-color);
+    }
+
+    h1 {
+        margin: 10px 0 20px 0;
+        color: #333;
+        font-size: 22px;
+        font-weight: 700;
+    }
+
+    /* Controls Container */
+    .controls-container {
+        width: 100%;
+        max-width: var(--max-width);
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+
+    /* Topic Selector */
+    .topic-select {
+        width: 100%;
+        padding: 12px;
+        border-radius: 12px;
+        border: 1px solid #ddd;
+        background: white;
+        font-size: 16px;
+        color: #333;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        appearance: none;
+        background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007CB2%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+        background-repeat: no-repeat;
+        background-position: right 15px top 50%;
+        background-size: 12px auto;
+    }
+
+    /* Controls Bar */
+    .controls-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        background: white;
+        padding: 10px 15px;
+        border-radius: 12px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        box-sizing: border-box;
+    }
+
+    .control-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        color: #555;
+    }
+
+    /* Toggle Switch */
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 44px;
+        height: 24px;
+    }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        border-radius: 24px;
+    }
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 18px;
+        width: 18px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        transition: .4s;
+        border-radius: 50%;
+    }
+    input:checked + .slider { background-color: var(--primary-color); }
+    input:checked + .slider:before { transform: translateX(20px); }
+
+    /* Restart Button */
+    .restart-btn {
+        background: none;
+        border: 1px solid #ddd;
+        padding: 6px 14px;
+        border-radius: 15px;
+        color: #666;
+        font-size: 13px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .restart-btn:active { background: #f0f0f0; }
+
+    /* Progress Bar */
+    #progressContainer {
+        width: 100%;
+        max-width: var(--max-width);
+        height: 6px;
+        background: #e0e0e0;
+        border-radius: 3px;
+        margin-bottom: 8px;
+        overflow: hidden;
+        display: none; /* Hidden by default */
+    }
+    #progressBar {
+        height: 100%;
+        width: 0%;
+        background: var(--primary-color);
+        transition: width 0.3s ease;
+    }
+    #progressText {
+        margin-bottom: 15px;
+        font-size: 13px;
+        color: #888;
+        display: none;
+    }
+
+    /* Manual Upload (Hidden mostly if using presets) */
+    .upload-hint {
+        font-size: 12px;
+        color: #999;
+        margin-top: 5px;
+        text-decoration: underline;
+        cursor: pointer;
+    }
+    #fileInput { display: none; }
+
+    /* Card Scene */
+    .scene {
+        width: var(--card-width);
+        max-width: var(--max-width);
+        height: var(--card-height);
+        perspective: 1000px;
+        margin-bottom: 20px;
+    }
+
+    .card {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+        transform-style: preserve-3d;
+        cursor: pointer;
+    }
+
+    .card.is-flipped { transform: rotateY(180deg); }
+
+    .card__face {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+        border-radius: 20px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        box-sizing: border-box;
+        text-align: center;
+        font-size: 20px;
+        line-height: 1.6;
+        background: white;
+        color: #333;
+        overflow-y: auto; /* Allow scroll for long text */
+    }
+
+    /* Custom Scrollbar for card content */
+    .card__face::-webkit-scrollbar { width: 4px; }
+    .card__face::-webkit-scrollbar-track { background: transparent; }
+    .card__face::-webkit-scrollbar-thumb { background: #ddd; border-radius: 2px; }
+
+    .card__face--front { background: white; font-weight: 500; }
+    .card__face--back {
+        background: #fffdeb;
+        transform: rotateY(180deg);
+        border: 2px solid var(--primary-color);
+        font-size: 18px;
+    }
+
+    .instructions {
+        font-size: 13px;
+        color: #aaa;
+        margin-top: 5px;
+        text-align: center;
+        pointer-events: none;
+    }
+
+    /* Navigation Buttons */
+    .btn-group {
+        display: flex;
+        width: var(--card-width);
+        max-width: var(--max-width);
+        gap: 15px;
+        margin-top: 20px;
+        margin-bottom: 30px;
+    }
+
+    .btn {
+        flex: 1;
+        padding: 14px 0;
+        font-size: 16px;
+        border: none;
+        border-radius: 12px;
+        background: white;
+        color: #555;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        cursor: pointer;
+        font-weight: 600;
+        transition: transform 0.1s, background 0.2s;
+    }
+    
+    .btn:active {
+        background: #f5f5f5;
+        transform: scale(0.96);
+    }
+    
+    /* Loading Spinner */
+    .loader {
+        border: 3px solid #f3f3f3;
+        border-radius: 50%;
+        border-top: 3px solid var(--primary-color);
+        width: 20px;
+        height: 20px;
+        animation: spin 1s linear infinite;
+        display: none;
+        margin: 0 auto;
+    }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+</style>
+</head>
+
+<body>
+
+<h1>🔥 上位机面试闪卡</h1>
+
+<div class="controls-container">
+    <select id="topicSelect" class="topic-select">
+        <option value="" disabled selected>📚 请选择题库...</option>
+        <option value="上位机.csv">📌 上位机基础概念 (C#)</option>
+        <option value="上位机开发.csv">🚀 上位机开发进阶 (架构/通讯)</option>
+    </select>
+
+    <div class="controls-bar">
+        <div class="control-item">
+            <label class="switch">
+                <input type="checkbox" id="shuffleToggle">
+                <span class="slider"></span>
+            </label>
+            <span>乱序</span>
+        </div>
+        <div class="loader" id="loader"></div>
+        <button class="restart-btn" id="restartBtn">↺ 重置进度</button>
+    </div>
+</div>
+
+<div id="progressContainer">
+    <div id="progressBar"></div>
+</div>
+<div id="progressText">0 / 0</div>
+
+<div class="scene">
+    <div class="card" id="card">
+        <div class="card__face card__face--front">
+            <div id="questionText">请在上方选择题库<br>开始复习</div>
+        </div>
+        <div class="card__face card__face--back">
+            <div id="answerText"></div>
+        </div>
+    </div>
+</div>
+
+<div class="instructions">
+    点击翻转 • 左滑下一题 • 右滑上一题
+</div>
+
+<div class="btn-group">
+    <button class="btn" id="prevBtn">上一题</button>
+    <button class="btn" id="nextBtn">下一题</button>
+</div>
+
+<label for="fileInput" class="upload-hint">📂 或者点击这里上传本地 CSV</label>
+<input type="file" id="fileInput" accept=".csv" />
+
+<script>
+/**
+ * 配置区域
+ * 如果你有新的CSV文件，确保放在 data/ 目录下，
+ * 并在此处列表中添加对应的文件名和显示名称。
+ */
+const PRESETS = [
+    { file: "上位机.csv", name: "📌 上位机基础概念" },
+    { file: "上位机开发.csv", name: "🚀 上位机开发进阶" }
+];
+
+// State Variables
+let rawCSVContent = "";     
+let originalCards = [];     
+let activeCards = [];       
+let currentIndex = 0;
+let isShuffle = false;
+let currentFileName = "";
+
+// DOM Elements
+const cardElement = document.getElementById('card');
+const questionText = document.getElementById('questionText');
+const answerText = document.getElementById('answerText');
+const shuffleToggle = document.getElementById('shuffleToggle');
+const progressBar = document.getElementById('progressBar');
+const progressText = document.getElementById('progressText');
+const progressContainer = document.getElementById('progressContainer');
+const topicSelect = document.getElementById('topicSelect');
+const loader = document.getElementById('loader');
+
+// --- Initialization ---
+window.addEventListener('DOMContentLoaded', () => {
+    // 1. Populate Select Options (Dynamic based on PRESETS config)
+    // Note: We already hardcoded options in HTML for simplicity, 
+    // but clearing and re-adding ensures JS config is source of truth.
+    topicSelect.innerHTML = '<option value="" disabled selected>📚 请选择题库...</option>';
+    PRESETS.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p.file;
+        opt.textContent = p.name;
+        topicSelect.appendChild(opt);
+    });
+
+    // 2. Load Saved State
+    loadProgress();
+});
+
+// --- Data Loading Logic ---
+
+// 1. Dropdown Selection (Fetch from Server/GitHub Pages)
+topicSelect.addEventListener('change', async function(e) {
+    const filename = e.target.value;
+    if(!filename) return;
+
+    currentFileName = filename;
+    showLoader(true);
+    
+    try {
+        // Cache bust to ensure we get latest version: ?v=Timestamp
+        const response = await fetch(`./data/${filename}?v=${new Date().getTime()}`);
+        if (!response.ok) throw new Error("无法加载文件，请检查 data 目录");
+        
+        const text = await response.text();
+        rawCSVContent = text;
+        currentIndex = 0; // Reset index on new file
+        
+        parseAndInit(rawCSVContent);
+        
+        // Remove focus from select to prevent keyboard interference
+        this.blur(); 
+    } catch (err) {
+        alert("加载失败: " + err.message);
+        questionText.innerHTML = "加载失败<br>请检查网络或文件路径";
+    } finally {
+        showLoader(false);
+    }
+});
+
+// 2. Local File Upload (Fallback)
+document.getElementById('fileInput').addEventListener('change', function (e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    currentFileName = "Local: " + file.name;
+    const reader = new FileReader();
+    reader.onload = function (evt) {
+        rawCSVContent = evt.target.result;
+        currentIndex = 0;
+        parseAndInit(rawCSVContent);
+        
+        // Add a temporary option to dropdown to show current status
+        const opt = document.createElement('option');
+        opt.text = "📂 " + file.name;
+        opt.selected = true;
+        topicSelect.add(opt);
+    };
+    reader.readAsText(file, 'utf-8'); // Assume UTF-8
+});
+
+function parseAndInit(csvText) {
+    const lines = csvText.split(/\r?\n/);
+    originalCards = [];
+
+    // Simple CSV Parser: assumes "Question, Answer" format
+    // Ignores lines starting with metadata if desired, 
+    // or cleans them up. Here we keep it simple.
+    for (const line of lines) {
+        if (!line.trim()) continue;
+        
+        // Handle comma separation, but be careful if answer has commas
+        // Strategy: First comma separates Q and A.
+        const firstCommaIndex = line.indexOf(',');
+        
+        if (firstCommaIndex > -1) {
+            let q = line.substring(0, firstCommaIndex).trim();
+            let a = line.substring(firstCommaIndex + 1).trim();
+            
+            // Cleanup "" tags if present in your data
+            q = q.replace(/^\\s*/, '');
+            
+            if(q && a) {
+                originalCards.push({ question: q, answer: a });
+            }
+        }
+    }
+
+    if (originalCards.length === 0) {
+        alert("文件格式看似不对或为空。");
+        return;
+    }
+
+    applyModeAndRender();
+    saveProgress();
+}
+
+// --- Core Logic ---
+function applyModeAndRender() {
+    isShuffle = shuffleToggle.checked;
+
+    if (isShuffle) {
+        activeCards = [...originalCards];
+        shuffleArray(activeCards);
+    } else {
+        activeCards = [...originalCards];
+    }
+
+    // Boundary check
+    if (currentIndex >= activeCards.length) currentIndex = 0;
+    
+    // UI Init
+    progressContainer.style.display = "block";
+    progressText.style.display = "block";
+    cardElement.classList.remove('is-flipped');
+    
+    updateCardContent();
+}
+
+function updateCardContent() {
+    if (activeCards.length === 0) return;
+    
+    const item = activeCards[currentIndex];
+    
+    questionText.innerHTML = item.question; // Use innerHTML to allow <br>
+    answerText.innerHTML = item.answer;
+
+    // Update Progress
+    const current = currentIndex + 1;
+    const total = activeCards.length;
+    const percent = (current / total) * 100;
+
+    progressBar.style.width = percent + "%";
+    progressText.textContent = `${current} / ${total}`;
+
+    saveProgress();
+}
+
+// --- Persistence ---
+function saveProgress() {
+    if (!currentFileName) return;
+    
+    const state = {
+        fileName: currentFileName,
+        csv: rawCSVContent, // We store content so we don't need to fetch again on refresh immediately
+        index: currentIndex,
+        shuffle: isShuffle
+    };
+    try {
+        localStorage.setItem('upper_computer_flashcards_v2', JSON.stringify(state));
+    } catch (e) { console.warn("Storage Full"); }
+}
+
+function loadProgress() {
+    const saved = localStorage.getItem('upper_computer_flashcards_v2');
+    if (saved) {
+        try {
+            const state = JSON.parse(saved);
+            if (state.csv) {
+                rawCSVContent = state.csv;
+                currentIndex = state.index || 0;
+                isShuffle = state.shuffle || false;
+                currentFileName = state.fileName;
+
+                // Restore UI
+                shuffleToggle.checked = isShuffle;
+                
+                // Try to set dropdown value
+                if(currentFileName && !currentFileName.startsWith("Local:")) {
+                    topicSelect.value = currentFileName;
+                } else {
+                    // Manual override UI for local files or unknown
+                    const opt = document.createElement('option');
+                    opt.text = "上次进度: " + (currentFileName || "未知");
+                    opt.selected = true;
+                    topicSelect.add(opt);
+                }
+
+                parseAndInit(rawCSVContent);
+            }
+        } catch (e) { console.error("Load Error", e); }
+    }
+}
+
+// --- Utils ---
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
+function showLoader(show) {
+    loader.style.display = show ? "block" : "none";
+}
+
+// --- Interaction Events ---
+
+// Shuffle Toggle
+shuffleToggle.addEventListener('change', () => {
+    currentIndex = 0; // Reset to start when changing mode to avoid confusion
+    applyModeAndRender();
+});
+
+// Restart
+document.getElementById('restartBtn').addEventListener('click', () => {
+    if (activeCards.length === 0) return;
+    if (confirm("确定要重置当前题库进度吗？")) {
+        currentIndex = 0;
+        cardElement.classList.remove('is-flipped');
+        if(isShuffle) shuffleArray(activeCards);
+        updateCardContent();
+    }
+});
+
+// Flip
+cardElement.addEventListener('click', () => {
+    if(activeCards.length > 0) cardElement.classList.toggle('is-flipped');
+});
+
+// Navigation
+function nextQuestion() {
+    if (activeCards.length === 0) return;
+    currentIndex = (currentIndex + 1) % activeCards.length;
+    cardElement.classList.remove('is-flipped');
+    setTimeout(updateCardContent, 150); // Slight delay for flip animation reset
+}
+
+function prevQuestion() {
+    if (activeCards.length === 0) return;
+    currentIndex = (currentIndex - 1 + activeCards.length) % activeCards.length;
+    cardElement.classList.remove('is-flipped');
+    setTimeout(updateCardContent, 150);
+}
+
+document.getElementById('nextBtn').addEventListener('click', (e) => { e.stopPropagation(); nextQuestion(); });
+document.getElementById('prevBtn').addEventListener('click', (e) => { e.stopPropagation(); prevQuestion(); });
+
+// Swipe Gestures
+let touchStartX = 0;
+document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; });
+document.addEventListener('touchend', e => {
+    const touchEndX = e.changedTouches[0].screenX;
+    const distance = touchEndX - touchStartX;
+    if (Math.abs(distance) > 50) {
+        distance < 0 ? nextQuestion() : prevQuestion();
+    }
+});
+
+// Keyboard Support
+document.addEventListener('keydown', (e) => {
+    if(e.key === "ArrowRight") nextQuestion();
+    if(e.key === "ArrowLeft") prevQuestion();
+    if(e.key === " " || e.key === "Enter") cardElement.classList.toggle('is-flipped');
+});
+
+</script>
+</body>
+</html>
