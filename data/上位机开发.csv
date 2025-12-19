@@ -98,3 +98,4 @@ OPC UA 中的 NodeId 是什么？,节点的唯一标识符，包含命名空间�
 什么是 Modbus Poll 和 Modbus Slave？,常用的 Modbus 调试工具。Poll 模拟主机（上位机），Slave 模拟从机（设备）。
 上位机项目中 Config 文件的作用？,App.config 或 appsettings.json，用于存储连接字符串、串口号、IP地址等可配置参数，避免硬编码。
 如何优化大量 DataGridView 数据的加载速度？,开启 VirtualMode（虚拟模式），或使用双缓冲，或分页加载，避免一次性添加过多行。
+上位机开发,上位机开发
