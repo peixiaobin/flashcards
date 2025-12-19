@@ -1,3 +1,16 @@
+这是一个根据您的需求修改后的完整代码。
+
+**主要修改点：**
+
+1. **下拉菜单生成逻辑**：不再使用预设的 `PRESETS` 数组，而是自动生成 **1 到 10** 的编号选项，对应的文件名默认为 `1.csv` 到 `10.csv`。
+2. **标题提取逻辑**：在解析 CSV 时，会自动读取**最后一行**。如果最后一行符合 `标题,标题` 的格式，它会被提取并在页面顶部 `<h1>` 标签中显示，同时该行不会作为题目出现在卡片中。
+3. **文件格式要求**：请确保您的 CSV 文件名为 `1.csv`, `2.csv` ... `10.csv`，且文件最后一行格式为 `您的标题,您的标题`。
+
+### 完整代码 (index.html)
+
+您可以直接复制并覆盖原文件：
+
+```html
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -33,6 +46,8 @@
         font-size: 20px;
         font-weight: 700;
         color: #1e293b;
+        text-align: center;
+        padding: 0 10px;
     }
 
     /* 顶部控制容器 */
@@ -266,12 +281,12 @@
 
 <body>
 
-<h1>⚡️ 上位机高频面试题</h1>
+<h1 id="pageTitle">⚡️ 上位机高频面试题</h1>
 
 <div class="controls-container">
     <select id="topicSelect" class="topic-select">
         <option value="" disabled selected>📂 点击选择题库...</option>
-        </select>
+    </select>
 
     <div class="controls-bar">
         <div class="control-item">
@@ -294,7 +309,7 @@
 <div class="scene">
     <div class="card" id="card">
         <div class="card__face card__face--front">
-            <div id="questionText">请在上方选择题库<br>开始刷题</div>
+            <div id="questionText">请在上方选择编号<br>开始刷题</div>
         </div>
         <div class="card__face card__face--back">
             <div id="answerText"></div>
@@ -314,21 +329,9 @@
 <script>
 /**
  * ===================================================
- * 配置区域：对应你 data/ 目录下的 CSV 文件名
+ * 逻辑区域
  * ===================================================
  */
-const PRESETS = [
-    { 
-        file: "上位机.csv", 
-        name: "📌 基础篇：C# 语言与 WinForm", 
-        desc: "值类型、引用类型、委托、事件、生命周期等" 
-    },
-    { 
-        file: "上位机开发.csv", 
-        name: "🚀 进阶篇：架构、通讯与多线程", 
-        desc: "Modbus、Socket、多线程、设计模式、硬件交互" 
-    }
-];
 
 // --- 状态变量 ---
 let rawCSVContent = "";     
@@ -348,16 +351,17 @@ const progressText = document.getElementById('progressText');
 const progressContainer = document.getElementById('progressContainer');
 const topicSelect = document.getElementById('topicSelect');
 const loader = document.getElementById('loader');
+const pageTitle = document.getElementById('pageTitle');
 
 // --- 初始化 ---
 window.addEventListener('DOMContentLoaded', () => {
-    // 1. 初始化下拉菜单
-    PRESETS.forEach(p => {
+    // 1. 初始化下拉菜单：生成 1 到 10 的选项
+    for (let i = 1; i <= 10; i++) {
         const opt = document.createElement('option');
-        opt.value = p.file;
-        opt.textContent = p.name;
+        opt.value = `${i}.csv`; // 对应文件 1.csv, 2.csv ...
+        opt.textContent = `题库编号 ${i}`; // 显示文本
         topicSelect.appendChild(opt);
-    });
+    }
 
     // 2. 加载上次进度
     loadProgress();
@@ -391,30 +395,53 @@ async function loadRemoteFile(filename) {
         parseAndInit(rawCSVContent);
     } catch (err) {
         console.error(err);
+        pageTitle.textContent = "⚠️ 加载失败";
         questionText.innerHTML = `⚠️ 加载失败<br><span style="font-size:14px;color:#999">请确认 data/${filename} 文件存在</span>`;
-        alert("无法读取文件，请检查 data 文件夹是否上传正确。");
+        alert("无法读取文件，请检查 data 文件夹下是否有对应的数字编号 CSV 文件。");
     } finally {
         showLoader(false);
     }
 }
 
-// --- CSV 解析逻辑 (针对你的文件格式优化) ---
+// --- CSV 解析逻辑 (包含标题提取) ---
 function parseAndInit(csvText) {
-    const lines = csvText.split(/\r?\n/);
+    // 1. 分割行并去除空行
+    let lines = csvText.split(/\r?\n/).filter(line => line.trim() !== "");
     originalCards = [];
 
-    for (const line of lines) {
-        if (!line.trim()) continue;
+    // 2. 检查最后一行是否为标题
+    // 逻辑：如果最后一行是 "标题,标题"，则将其提取为页面标题
+    if (lines.length > 0) {
+        const lastLine = lines[lines.length - 1];
+        const lastCommaIndex = lastLine.indexOf(',');
         
-        // 你的文件是 "问题,答案" 格式
+        if (lastCommaIndex > -1) {
+            const partA = lastLine.substring(0, lastCommaIndex).trim();
+            const partB = lastLine.substring(lastCommaIndex + 1).trim();
+            
+            // 如果逗号前后内容一致，认为是标题行
+            if (partA === partB && partA.length > 0) {
+                // 设置页面标题
+                pageTitle.textContent = partA;
+                // 从数据源中移除最后一行，不作为题目显示
+                lines.pop();
+            } else {
+                // 如果没有找到标题行，设置默认标题
+                pageTitle.textContent = "上位机面试闪卡";
+            }
+        }
+    }
+
+    // 3. 解析剩余行作为题目
+    for (const line of lines) {
         const firstCommaIndex = line.indexOf(',');
         
         if (firstCommaIndex > -1) {
             let q = line.substring(0, firstCommaIndex).trim();
             let a = line.substring(firstCommaIndex + 1).trim();
             
-            // 清理 这种标签
-            q = q.replace(/^\\s*/, '');
+            // 清理 BOM 头或空白
+            q = q.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
             
             if(q && a) {
                 originalCards.push({ question: q, answer: a });
@@ -423,7 +450,7 @@ function parseAndInit(csvText) {
     }
 
     if (originalCards.length === 0) {
-        alert("文件内容为空或格式无法解析");
+        alert("文件内容为空或无有效题目数据");
         return;
     }
 
@@ -583,3 +610,5 @@ document.addEventListener('keydown', (e) => {
 </script>
 </body>
 </html>
+
+```
