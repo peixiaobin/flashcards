@@ -98,3 +98,4 @@ DateTime.Now的作用？,获取当前系统的日期和时间。
 什么是序列化？,将对象转换为字节流（或XML/JSON）以便存储或传输的过程。
 List<T>.Where()方法的作用？,使用LINQ查询，筛选出满足条件的元素集合。
 如何彻底退出WinForms应用程序？,Application.Exit() 或 Environment.Exit(0)。
+UpperComputerDevelopment_QA_100,UpperComputerDevelopment_QA_100
